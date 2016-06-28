@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, DefaultSignatures, FlexibleInstances, FlexibleContexts,
+{-# LANGUAGE DefaultSignatures, FlexibleInstances, FlexibleContexts,
              ScopedTypeVariables #-}
 -- |Support for writing "Linear" types to uniform locations in
 -- shader programs.
@@ -51,14 +51,14 @@ instance UniformComponent a => AsUniform (Vertex4 a) where
 instance UniformComponent a => AsUniform (Vertex3 a) where
 instance UniformComponent a => AsUniform (Vertex2 a) where
 
-#define UNIFORMVEC_T(d,ht,glt) instance AsUniform (V ## d ht) where {v `asUniform` loc = with v $ glUniform##d##glt##v (getUL loc) 1 . castVecComponent}
 
-#define UNIFORMVEC(d) UNIFORMVEC_T(d,GLint,i); UNIFORMVEC_T(d,GLuint,ui); UNIFORMVEC_T(d,GLfloat,f)
 
-UNIFORMVEC(1)
-UNIFORMVEC(2)
-UNIFORMVEC(3)
-UNIFORMVEC(4)
+
+
+instance AsUniform (V1 GLint) where {v `asUniform` loc = with v $ glUniform1iv (getUL loc) 1 . castVecComponent}; instance AsUniform (V1 GLuint) where {v `asUniform` loc = with v $ glUniform1uiv (getUL loc) 1 . castVecComponent}; instance AsUniform (V1 GLfloat) where {v `asUniform` loc = with v $ glUniform1fv (getUL loc) 1 . castVecComponent}
+instance AsUniform (V2 GLint) where {v `asUniform` loc = with v $ glUniform2iv (getUL loc) 1 . castVecComponent}; instance AsUniform (V2 GLuint) where {v `asUniform` loc = with v $ glUniform2uiv (getUL loc) 1 . castVecComponent}; instance AsUniform (V2 GLfloat) where {v `asUniform` loc = with v $ glUniform2fv (getUL loc) 1 . castVecComponent}
+instance AsUniform (V3 GLint) where {v `asUniform` loc = with v $ glUniform3iv (getUL loc) 1 . castVecComponent}; instance AsUniform (V3 GLuint) where {v `asUniform` loc = with v $ glUniform3uiv (getUL loc) 1 . castVecComponent}; instance AsUniform (V3 GLfloat) where {v `asUniform` loc = with v $ glUniform3fv (getUL loc) 1 . castVecComponent}
+instance AsUniform (V4 GLint) where {v `asUniform` loc = with v $ glUniform4iv (getUL loc) 1 . castVecComponent}; instance AsUniform (V4 GLuint) where {v `asUniform` loc = with v $ glUniform4uiv (getUL loc) 1 . castVecComponent}; instance AsUniform (V4 GLfloat) where {v `asUniform` loc = with v $ glUniform4fv (getUL loc) 1 . castVecComponent}
 
 instance AsUniform (M22 GLfloat) where
   m `asUniform` loc = with m
@@ -74,11 +74,12 @@ instance AsUniform (M44 GLfloat) where
 
 -- Support lists of vectors as uniform arrays of vectors.
 
-#define UNIFORMARRAY_T(d,ht,glt) instance AsUniform [V##d ht] where {l `asUniform` loc = withArray l $ glUniform##d##glt##v (getUL loc) (fromIntegral $ length l) . castVecComponent}
 
-#define UNIFORMARRAY(d) UNIFORMARRAY_T(d,GLint,i); UNIFORMARRAY_T(d,GLuint,ui); UNIFORMARRAY_T(d,GLfloat,f)
 
-UNIFORMARRAY(1)
-UNIFORMARRAY(2)
-UNIFORMARRAY(3)
-UNIFORMARRAY(4)
+
+
+instance AsUniform [V1 GLint] where {l `asUniform` loc = withArray l $ glUniform1iv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V1 GLuint] where {l `asUniform` loc = withArray l $ glUniform1uiv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V1 GLfloat] where {l `asUniform` loc = withArray l $ glUniform1fv (getUL loc) (fromIntegral $ length l) . castVecComponent}
+instance AsUniform [V2 GLint] where {l `asUniform` loc = withArray l $ glUniform2iv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V2 GLuint] where {l `asUniform` loc = withArray l $ glUniform2uiv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V2 GLfloat] where {l `asUniform` loc = withArray l $ glUniform2fv (getUL loc) (fromIntegral $ length l) . castVecComponent}
+instance AsUniform [V3 GLint] where {l `asUniform` loc = withArray l $ glUniform3iv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V3 GLuint] where {l `asUniform` loc = withArray l $ glUniform3uiv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V3 GLfloat] where {l `asUniform` loc = withArray l $ glUniform3fv (getUL loc) (fromIntegral $ length l) . castVecComponent}
+instance AsUniform [V4 GLint] where {l `asUniform` loc = withArray l $ glUniform4iv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V4 GLuint] where {l `asUniform` loc = withArray l $ glUniform4uiv (getUL loc) (fromIntegral $ length l) . castVecComponent}; instance AsUniform [V4 GLfloat] where {l `asUniform` loc = withArray l $ glUniform4fv (getUL loc) (fromIntegral $ length l) . castVecComponent}
+
